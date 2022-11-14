@@ -2,12 +2,12 @@
 
 #Lithium
 
-Repository for backend cohort - Lithium
+#Repository for backend cohort - Lithium
 Blogging Site Mini Project Requirement
 Phase I
 Models
 
-   # Author Model
+    Author Model
 
 { fname: { mandatory}, lname: {mandatory}, title: {mandatory, enum[Mr, Mrs, Miss]}, email: {mandatory, valid email, unique}, password: {mandatory} }
 
