@@ -46,6 +46,39 @@ const getAllBlogs = async (req, res) => {
   };
 
 
+  const updateBlog = async (req, res) => {
+    req.body.isPublished = true;
+    req.body.publishedAt = new Date();
+    try {
+      const blog = await blogModel.findOneAndUpdate(
+        { _id: req.params.blogId, isDeleted: false },
+        {
+          $set: req.body,
+        },
+        {
+          new: true,
+        }
+      );
+  
+
+    if(blog){
+        res.status(200).send({status:true,data:blog})
+    }
+    else{
+        res.status(404).send({status:false,msg:`${req.params.blogId} id not found!`})
+    }
+    } catch (error) {
+      res.status(500).json({
+        status: false,
+        error:error.message
+      });
+    }
+  };
+
+
+
+
+module.exports.updateBlog=updateBlog
  
 module.exports.createBlog= createBlog 
 module.exports.getAllBlogs=getAllBlogs
