@@ -5,20 +5,21 @@ const {idCharacterValid,isValidString} = require("../validator/validator");
 const createBlog =async function (req,res){
     try{
         const data= req.body
+        let id = data.authorId
         if(Object.keys(data).length==0)  return res.status(400).send({status:false,msg:"request body is Empty"})
         const {title,body,authorId,category}=data
 
-        if (!title)  return res.status(400).send({ status: false, msg: "title is requred" });
-        if (!body)  return res.status(400).send({ status: false, msg: "body is requred" });
-        if (!authorId)  return res.status(400).send({ status: false, msg: "authorId is requred" });
-        if (!category)  return res.status(400).send({ status: false, msg: "category is requred" });
+        if (!title)  return res.status(400).send({ status: false, msg: "title is required" });
+        if (!body)  return res.status(400).send({ status: false, msg: "body is required" });
+        if (!authorId)  return res.status(400).send({ status: false, msg: "authorId is required" });
+        if (!category)  return res.status(400).send({ status: false, msg: "category is required" });
 
         if(!isValidString(title))   return res.status(400).send({ status: false, msg: "Please provide valid title" })
         if(!isValidString(body))   return res.status(400).send({ status: false, msg: "Please provide valid body" })
         if(!isValidString(category))   return res.status(400).send({ status: false, msg: "Please provide valid category" });
         
         if(!idCharacterValid(authorId))   return res.status(400).send({status:false,msg:"Please provide the valid authorid"})
-        const authordata = await authorModel.find({_id:data.authorId})
+        const authordata = await authorModel.findById(id)
         if(!authordata)  return res.status(400).send({status:false,msg:"author Id doesn't exist"})
         
         const savedData = await blogModel.create(data)
@@ -28,31 +29,23 @@ const createBlog =async function (req,res){
     }
 }
 
-const getData =async function (req,res){
+const getAllBlogs = async (req, res) => {
     try {
-        let data=req.query
-        const { author, categor, subcategor, tag } = data
-        
-        if(Object.keys(req.query).length==0) { 
-        let savedata = await blogModel.find({ isDeleted: false, isPublished: true })
-        if (savedata.length == 0) {
-            return res.status(404).send({ status: false, msg: "blogs not found" })
-        } else {  
-            return res.status(200).send({ status: true, data: savedata })
-        }}
-
-        if(Object.keys(req.query).length>0){
-            let savedata2=await blogModel.find({$and:[{ isDeleted: false, isPublished: true } , {$or:[{authorId:author },{ category:categor },{subcategory:subcategor },{tags:tag}]}]})
-            if(savedata2.length==0)  return res.status(404).send({status:false,message:"this blog not found"})
-
-            res.status(200).send({ status:true,msg:savedata2})
-        }
-   
-    } catch (err) {
-        return res.status(500).send({ status: false, error: err.message })
+      const blogs = await blogModel.find(req.query); 
+      res.status(200).json({
+        status: true,
+        result: `${blogs.length} blogs found!`,
+        blogs,
+      });
+    } catch (error) {
+      res.status(404).json({
+        status: "Not found",
+        error: error.message,
+      });
     }
+  };
 
-}
 
-module.exports.getData=getData 
+// module.exports.getData=getData 
 module.exports.createBlog= createBlog 
+module.exports.getAllBlogs=getAllBlogs
