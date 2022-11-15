@@ -46,6 +46,6 @@ const getAllBlogs = async (req, res) => {
   };
 
 
-// module.exports.getData=getData 
+ 
 module.exports.createBlog= createBlog 
 module.exports.getAllBlogs=getAllBlogs
