@@ -1,24 +1,15 @@
 const blogModel = require('../models/bolgModel')
 const authorModel = require('../models/authorModel')
-const {
-  idCharacterValid,
-  isValidString
-} = require("../validator/validator");
+const {idCharacterValid,isValidString} = require("../validator/validator");
 
+/***********************************************For create author************************************************************/
 const createBlog = async function (req, res) {
   try {
     const data = req.body
     let id = data.authorId
-    if (Object.keys(data).length == 0) return res.status(400).send({
-      status: false,
-      msg: "request body is Empty"
+    if (Object.keys(data).length == 0) return res.status(400).send({status: false,msg: "request body is Empty"
     })
-    const {
-      title,
-      body,
-      authorId,
-      category
-    } = data
+    const {title,body,authorId,category} = data
 
     if (!title) return res.status(400).send({
       status: false,
@@ -61,10 +52,7 @@ const createBlog = async function (req, res) {
     })
 
     const savedData = await blogModel.create(data)
-    return res.status(201).send({
-      status: true,
-      data: savedData
-    })
+    return res.status(201).send({status: true,data: savedData})
   } catch (error) {
     return res.status(500).send({
       status: false,
@@ -73,6 +61,7 @@ const createBlog = async function (req, res) {
   }
 }
 
+/***********************************************For get all blogs************************************************************/
 const getAllBlogs = async (req, res) => {
   try {
     const blogs = await blogModel.find(req.query);
@@ -89,6 +78,7 @@ const getAllBlogs = async (req, res) => {
   }
 };
 
+/***********************************************For update blogs by id************************************************************/
 
 const updateBlog = async (req, res) => {
   req.body.isPublished = true;
@@ -123,6 +113,7 @@ const updateBlog = async (req, res) => {
   }
 };
 
+/***************************************Update blogs using path params************************************************************/
 const deleteBlog = async (req, res) => {
   try {
     const blog = await blogModel.findOneAndUpdate({
@@ -156,15 +147,10 @@ const deleteBlog = async (req, res) => {
   }
 };
 
+/***************************************Update blogs using query params************************************************************/
 const deleteBlogQuery = async (req, res) => {
   try {
-    const blogs = await blogModel.updateMany(
-      req.query, {
-        isDeleted: true
-      }, {
-        new: true
-      }
-    );
+    const blogs = await blogModel.updateMany(req.query, {isDeleted: true}, {new: true});
 
     if (blogs) {
       res.status(200).send({
@@ -188,8 +174,8 @@ const deleteBlogQuery = async (req, res) => {
 
 
 
-module.exports.updateBlog = updateBlog
 
+module.exports.updateBlog = updateBlog
 module.exports.createBlog = createBlog
 module.exports.getAllBlogs = getAllBlogs
 module.exports.deleteBlog = deleteBlog
