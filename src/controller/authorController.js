@@ -23,6 +23,7 @@ const createauther = async function (req, res) {
     if(!isValidEmail(email))  return res.status(400).send({status:false,msg:"invalid emailid"})
 
     if(!isValidPassword(password))  return res.status(400).send({ status: false, msg: "Please provide valid password" })
+    
     let uniqueEmail= await authorModel.findOne({email:email})
     if(uniqueEmail)  return res.status(400).send({status:false,message:"email is already exist"})
 

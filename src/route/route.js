@@ -10,7 +10,7 @@ router.post('/authors',authorController.createauther)
 
 router.get('/blogs',blogController.getAllBlogs)
 
-router.put('/blogs/:blogId',blogController.updateBlog)
+router.put('/blogs/:blogId',blogController.updatedBlog)
 
 router.delete('/blogs/:blogId',blogController.deleteBlog)
 
