@@ -75,6 +75,32 @@ const getAllBlogs = async (req, res) => {
     }
   };
 
+  const deleteBlog = async (req, res) => {
+    try {
+      const blog = await blogModel.findOneAndUpdate(
+        { _id: req.params.blogId, isDeleted: false },
+        {
+          $set: { isDeleted: true,deletedAt: new Date() },
+        },
+        {
+          new: true,
+        }
+      );
+    
+    if(blog){
+        res.status(200).send({status:true,msg:blog})
+    }
+    else
+    {
+        res.status(404).send({status:false,msg:`${req.params.blogId} id not found!`})
+    }
+    } catch (error) {
+      res.status(500).json({
+        status: flase,
+        error:error.message
+  });
+}
+};
 
 
 
@@ -82,3 +108,4 @@ module.exports.updateBlog=updateBlog
  
 module.exports.createBlog= createBlog 
 module.exports.getAllBlogs=getAllBlogs
+module.exports.deleteBlog=deleteBlog
