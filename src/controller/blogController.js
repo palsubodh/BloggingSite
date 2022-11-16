@@ -58,6 +58,7 @@ const createBlog = async function (req, res) {
       status: false,
       msg: error.message
     })
+
   }
 }
 
@@ -91,30 +92,11 @@ const getAllBlogs = async (req, res) => {
 
 /***********************************************For update blogs by id************************************************************/
 
-// const updateBlog = async (req, res) => {
-//   req.body.isPublished = true;
-//   req.body.publishedAt = new Date();
-//   try {
-//     const blog = await blogModel.findOneAndUpdate({_id: req.params.blogId, isDeleted: false}, {$set: req.body,}, {new: true,});
-
-
-//     if (blog) {
-//       res.status(200).send({status: true,data: blog})
-//     } 
-//     else{
-//       res.status(404).send({status: false,msg: `${req.params.blogId} id not found!`})
-//     }
-//   } catch (error) {
-//     res.status(500).json({status: false,error: error.message});
-//   }
-// };
-
-
 let updatedBlog = async function(req,res){
   try{
     let id = req.params.blogId
-    if(!idCharacterValid(id)) return res.status(400).json({status:false,msg:"Invalid blog id"})
-let updateBlog =await blogModel.findOneAndUpdate(
+    if(!idCharacterValid(id)) return res.status(404).json({status:false,msg:"Invalid blog id"})
+    let updateBlog =await blogModel.findOneAndUpdate(
   {_id:id},
   {
     $set:{
@@ -123,6 +105,7 @@ let updateBlog =await blogModel.findOneAndUpdate(
       category:req.body.category,
       publishedAt:new Date(Date.now()),
       isPublished:true,
+      isDeleted:false,
     },
     $push:{tags:req.body.tags,subcategory:req.body.subcategory},
   },
@@ -155,7 +138,7 @@ const deleteBlog = async (req, res) => {
 
     if(!checkId || (checkId.isDeleted==true))
     {
-      return res.status(404).send({status:flase,msg:"Blog has been already deleted"})
+      return res.status(404).send({status:false,msg:"Blog has been already deleted"})
     }
     const blog = await blogModel.findOneAndUpdate({_id: req.params.blogId,isDeleted: false}, {$set: {isDeleted: true, deletedAt: new Date()},}, {new: true,});
 
@@ -175,7 +158,14 @@ const deleteBlog = async (req, res) => {
 /***************************************Update blogs using query params************************************************************/
 const deleteBlogQuery = async (req, res) => {
   try {
+    let Id = req.query.blogId
     const blogs = await blogModel.updateMany(req.query, {isDeleted: true}, {new: true});
+    let checkId = await blogModel.findById(Id)
+
+    if(!checkId || (checkId.isDeleted==true))
+    {
+      return res.status(404).send({status:false,msg:"Blog has been already deleted"})
+    }
 
     if (blogs) {
       res.status(200).send({
