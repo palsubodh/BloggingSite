@@ -7,7 +7,7 @@ const auth = async function(req,res,next){
 
         if(header){
             const decode = await jwt.verify(header,"Subodh@123")
-            console.log(decode)
+            // console.log(decode)
             req.id=decode
             next()
         }

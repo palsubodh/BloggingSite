@@ -10,7 +10,7 @@ const login = async function(req,res){
         const fetchdata = await authorModel.findOne({email:email,password:password})
 
         if(fetchdata==null) return res.status(401).send({status:false,msg:"Doesn't match the email and password"})
-        console.log("login success")
+        // console.log("login success")
 
         const mytoken = jwt.sign({email:email,id:fetchdata._id},"Subodh@123")
         console.log(mytoken)

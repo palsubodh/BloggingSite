@@ -103,7 +103,7 @@ let updatedBlog = async function(req,res){
       title:req.body.title,
       body:req.body.body,
       category:req.body.category,
-      publishedAt:new Date(Date.now()),
+      publishedAt:new Date(Date.now()),  //new Date(Date.now())
       isPublished:true,
       isDeleted:false,
     },
@@ -140,10 +140,10 @@ const deleteBlog = async (req, res) => {
     {
       return res.status(404).send({status:false,msg:"Blog has been already deleted"})
     }
-    const blog = await blogModel.findOneAndUpdate({_id: req.params.blogId,isDeleted: false}, {$set: {isDeleted: true, deletedAt: new Date()},}, {new: true,});
+    const blog = await blogModel.findOneAndUpdate({_id: req.params.blogId,isDeleted: false}, {$set: {isDeleted: true, deletedAt: new Date()},});
 
     if (blog) {
-      res.status(200).send({status: true,msg: blog})
+      res.status(200).send({status: true,msg: "Blog deleted Successfully"})
     } else {
       res.status(404).send({status: false,msg: `${req.params.blogId} id not found!`})
     }
