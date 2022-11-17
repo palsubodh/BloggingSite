@@ -6,9 +6,9 @@ const auth = async function(req,res,next){
         let header = req.headers["x-api-key"]
 
         if(header){
-            const decode = await jwt.verify(header,"Subodh@123")
+            const decode =  jwt.verify(header,"Subodh@123")
             // console.log(decode)
-            req.id=decode
+            req.id=decode.id
             next()
         }
         else{

@@ -10,17 +10,11 @@ const authormiddleware = require("../middleware/authorization")
 router.post('/authors',authorController.createauther)
 router.post("/login",loginController.login)
 
-
-
-router.get('/blogs',authmiddleware.auth,authormiddleware.authorization,blogController.getAllBlogs)
-router.post('/blogs',authmiddleware.auth,authormiddleware.authorization,blogController.createBlog)
+router.get('/blogs',authmiddleware.auth,blogController.getAllBlogs)
+router.post('/blogs',authmiddleware.auth,blogController.createBlog)
 router.put('/blogs/:blogId',authmiddleware.auth,authormiddleware.authorization,blogController.updatedBlog)
 router.delete('/blogs/:blogId',authmiddleware.auth,authormiddleware.authorization,blogController.deleteBlog)
-router.delete("/blogs", authmiddleware.auth,authormiddleware.authorization,blogController.deleteBlogQuery);
-
-
-
-
+router.delete("/blogs", authmiddleware.auth,blogController.deleteBlogQuery);
 
 module.exports = router
 

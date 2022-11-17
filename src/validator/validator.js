@@ -3,12 +3,14 @@ const mongoose = require("mongoose")
 
 const isValidEmail = function (value) {
   let emailRegex =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-z\-0-9]+\.)+[a-z]{2,3}))$/
-    // /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-z\-0-9]+\.)+[a-z]{2,}))$/;
+   
   if (emailRegex.test(value)) return true;
 };
 
 const idCharacterValid = function (value) {
-    return mongoose.Types.ObjectId.isValid(value);
+    //return mongoose.Types.ObjectId.isValid(value);
+    let validId = /^[a-fA-F0-9]{24}$/
+    if(validId.test(value)) return true;
 };
   
 
