@@ -8,11 +8,11 @@ const isValidEmail = function (value) {
 };
 
 const idCharacterValid = function (value) {
-    //return mongoose.Types.ObjectId.isValid(value);
-    let validId = /^[a-fA-F0-9]{24}$/
-    if(validId.test(value)) return true;
+    return mongoose.Types.ObjectId.isValid(value);
+   
+  //if(validId.test(value)) return true;
 };
-  
+
 
 const isValidString = function (value) {
     if (typeof value === "undefined" || value === null) return false;
@@ -24,6 +24,14 @@ const isValidPassword = function (pw) {
     let pass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,15}$/;
     if (pass.test(pw)) return true;
   };
+
+
+
+
+
+
+
+
   
   
 module.exports={isValidEmail,idCharacterValid,isValidString,isValidPassword}

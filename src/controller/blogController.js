@@ -92,7 +92,8 @@ const getAllBlogs = async (req, res) => {
 let updatedBlog = async function(req,res){
   try{
     let id = req.params.blogId
-    if(!idCharacterValid(id)) return res.status(404).json({status:false,msg:"Invalid blog id"})
+    
+    if(!idCharacterValid(id)) return res.status(404).json({status:false,msg:"Invaild blogId"})
 
     let gotid =await blogModel.findById({_id:id})
     if(!gotid) return res.status(400).json({status:false,msg:"This is id not present in DB"})
@@ -111,7 +112,7 @@ let updatedBlog = async function(req,res){
   },
   {new:true}
 )
-return res.status(200).send({status:true,msg:updateBlog})
+return res.status(200).send({status:true,message:"Successfully updated",data:updateBlog})
   } catch(err){
     res.status(500).send({status:false,msg:err.message})
   }
@@ -130,7 +131,7 @@ const deleteBlog = async (req, res) => {
     const blog = await blogModel.findOneAndUpdate({_id: req.params.blogId,isDeleted: false}, {$set: {isDeleted: true, deletedAt: new Date(Date.now())},});
 
     if (blog) {
-      res.status(200).send()
+      res.status(200).send({status:true})
     } else {
       res.status(404).send({status: false,msg: `${req.params.blogId} id not found!`})
     }
@@ -149,7 +150,7 @@ const deleteBlogQuery = async (req, res) => {
     let checkId = await blogModel.find(req.query).select({_id:0,authorId:1})
     if(checkId.length==0)
     {
-      return res.status(404).send({status:false,msg:"No Blog found"})
+      return res.status(404).send({status:false,data:"No Blog found"})
     }
     let count=0
   for(let i=0;i<checkId.length;i++)
@@ -172,9 +173,9 @@ const deleteBlogQuery = async (req, res) => {
         msg: `${blogs.modifiedCount} blog deleted success!`
       })
     } else {
-      res.status(404).send({
-        status: false,
-        msg: "Blog is already deleted"
+      res.status(200).send({
+        status: true,
+        // msg: "Blog is already deleted"
       })
     }
   } catch (error) {

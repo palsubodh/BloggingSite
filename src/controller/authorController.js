@@ -4,6 +4,7 @@ const {isValidEmail,isValidString,isValidPassword} = require("../validator/valid
 
 const createauther = async function (req, res) {
   try { 
+    //console.log(req)
     let data = req.body;
     const { fname, lname, title, email,password } = data;
     if(Object.keys(data).length==0)  return res.status(400).send({status:false,msg:"request body is Empty"})
@@ -28,7 +29,7 @@ const createauther = async function (req, res) {
     if(uniqueEmail)  return res.status(400).send({status:false,message:"email is already exist"})
 
     let savedData = await authorModel.create(data);
-    return res.status(201).send({ msg: savedData });
+    return res.status(201).send({status:true,data: savedData });
   } catch (error) {
     return res.status(500).send({ status: false, msg: error.message });
   }
